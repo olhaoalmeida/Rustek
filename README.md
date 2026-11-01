@@ -1,4 +1,4 @@
-# Mekanism Horizon (nome provisório)
+# Mekanism Rust
 
 Um mod para o [Horizon](https://playhorizon.dev) (Minecraft Java 26.3 em Rust) que reúne o Mekanism e
 seus addons em um mod só. O jogador escolhe nas configurações quais módulos ficam ligados.

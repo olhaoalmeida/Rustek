@@ -1,6 +1,6 @@
-# Mekanism Horizon: desenho (rascunho)
+# Mekanism Rust: desenho (rascunho)
 
-Nome do projeto: a definir entre "Mekanism Rust" e "Mekanism Horizon" (ver seção 9).
+Nome do projeto: **Mekanism Rust**.
 
 Status: rascunho para revisão. Nenhum código foi escrito. Será retomado quando o Horizon tiver os
 recursos necessários (ver "Dependências do Horizon").
@@ -121,11 +121,90 @@ Lacunas que eu não confirmei no código e que precisam de checagem:
 
 ## 9. Perguntas em aberto
 
-1. Nome do projeto: **Mekanism Rust** ou **Mekanism Horizon**? (Escolha ainda não feita.)
-2. Reinício: o jogo deve fechar e reabrir sozinho, ou só fechar? O desenho assume reabrir sozinho.
+1. Reinício: o jogo deve fechar e reabrir sozinho, ou só fechar? O desenho assume reabrir sozinho.
 
 Respostas já dadas:
 - Padrão de mundo novo: os módulos ligados no momento da criação (seção 3).
+- Nome: Mekanism Rust.
 - Publicação: pública.
 - iglee42: será contatado quando o desenho sair do papel e começar o código.
 - Bloqueio de entrada: confirmado (seção 4).
+
+## 10. Plano para a IA que vai programar
+
+Este plano vale para qualquer IA ou pessoa que escreva código neste repositório. Os mesmos passos
+estão em `AGENTS.md`, que é a versão curta para ferramentas.
+
+### 10.1 Regras de trabalho
+
+1. **Não achar nada.** Se o código, a documentação ou o mod original não respondem, a IA pergunta ao
+   dono do projeto antes de seguir. Vale também para licença e para nomes de blocos e itens.
+2. **Ler antes de escrever.** Para cada tarefa, ler o código-fonte do Horizon que ela toca e o
+   comportamento do mod Java original (o jar ou o código publicado). Anotar o que foi lido.
+3. **O Mekanism original é a especificação.** Valores, receitas, tempos e consumo de energia vêm do
+   original. Onde o original tem um número, o port usa o mesmo número; onde difere, vai para
+   `DIFERENCAS.md` com o motivo.
+4. **Passos pequenos.** Uma tarefa por vez, um commit por tarefa, sem misturar assunto. Nunca em
+   `main` direto: uma branch por fatia e um pull request.
+5. **Licença sempre.** Código ou dado vindo de um mod MIT leva o aviso de copyright no arquivo ou em
+   `NOTICE.md`. Nunca incluir jar, textura ou som de outro mod sem confirmar a licença do arquivo.
+6. **Nada de dependência externa** além do Horizon (ver seção 6).
+7. **Marcar o que é IA.** Commits com a linha `Co-Authored-By` do modelo usado.
+
+### 10.2 Como cada tarefa termina
+
+Uma tarefa só está pronta quando:
+- o código compila e passa no formatador e no linter do Horizon;
+- há um teste que verifica **comportamento observável** (por exemplo: a máquina converte o minério em
+  pó com o tempo e a energia do original), com valor esperado vindo do original e não do próprio código;
+- o dono rodou o jogo e viu funcionar, quando a tarefa tem parte visual (tela, textura, modelo);
+- `PROGRESSO.md` registra o que foi feito, o que foi lido e o que ficou pendente.
+
+A IA não declara "pronto" sem os dois primeiros itens e deve dizer claramente quando não pôde
+testar algo (por exemplo, falta de placa de vídeo ou dos dados do Minecraft).
+
+### 10.3 Tarefas por fatia (ver seção 7)
+
+- **Fatia 0, antes de qualquer código:** verificar no código do Horizon o que existe para energia,
+  fluidos, telas e receitas de mod nativo, e o que falta (gases, multiblocos, cabos). Entregável:
+  uma tabela "existe / falta / como contornar", com o arquivo e a linha de cada item.
+- **Fatia 1:** estrutura do mod nativo, tela de configurações com os interruptores, leitura do arquivo
+  de configuração, reinício automático, uma máquina simples.
+- **Fatia 2:** a lista de módulos gravada no mundo e o bloqueio de entrada (seção 4), com testes.
+- **Fatia 3:** módulos, um por vez, do mais simples ao mais complexo.
+- **Fatia 4:** Evolved (níveis extras registrados por módulo).
+
+### 10.4 Divisão de modelos (sugestão, não é prova)
+
+A escolha abaixo vem de **descrições públicas dos modelos**, não de um teste neste projeto, e eu sou o
+Claude, então tenho interesse na resposta; trate como ponto de partida.
+
+Descrições encontradas (setembro e outubro de 2026):
+- **GPT-6 Luna:** a opção de menor custo da família GPT-6, para trabalho focado e de alto volume
+  (US$ 0,10 entrada e US$ 0,50 saída por milhão de tokens).
+- **GPT-5.6 Terra:** faixa intermediária, equilibra custo e capacidade (US$ 2 e US$ 12 por milhão).
+- **GPT-6 Sol e GPT-6 Astra:** estão acima das duas; a OpenAI posiciona o Sol para programação complexa
+  e fluxos agênticos. Vale considerá-los, porque o projeto é grande e difícil.
+- **Claude Sonnet 5.5:** modelo "inteligente e eficiente para uso diário" do Claude.
+
+Uso sugerido:
+| Papel | Tipo de tarefa | Modelo a testar primeiro |
+|---|---|---|
+| Arquiteto | Fatia 0, desenho do núcleo, regras de mundo, revisão de pull request | o mais capaz que você tiver acesso |
+| Construtor | Fatias 1 a 4, código das máquinas e telas | um modelo médio (Sonnet 5.5 ou Terra) |
+| Operário | Conversão em massa: receitas, textos, tabelas de valores | o mais barato (Luna) |
+
+Por que não usar os três em tudo: cada modelo precisa receber o mesmo contexto (este desenho e
+`AGENTS.md`), e vários modelos mexendo no mesmo código sem regra geram conflitos de estilo e
+decisões contraditórias. Se usar mais de um, **um escreve e outro revisa**, nunca dois escrevendo na
+mesma fatia ao mesmo tempo.
+
+Como decidir de verdade: dar a **mesma tarefa pequena e real** (por exemplo, uma máquina simples com
+receita) a cada modelo, rodar os testes e comparar o resultado e o custo. Só depois fixar os papéis.
+
+### 10.5 O que a IA nunca faz sozinha
+
+- Publicar o mod, abrir pull request em repositório de outra pessoa ou falar com autores em nome do dono.
+- Apagar arquivos do dono ou mexer em dados de jogador (mundos, configurações reais).
+- Copiar código de outro mod sem registrar origem e licença.
+- Afirmar que algo funciona sem ter testado.
