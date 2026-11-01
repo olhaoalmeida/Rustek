@@ -1,0 +1,15 @@
+# Arquivos de terceiros nunca entram no repositório (AGENTS.md, regra 5).
+# Jars, texturas e sons dos mods originais ficam só na máquina de quem trabalha.
+referencia/*
+!referencia/LEIAME.md
+*.jar
+*.hnmod
+*.hmod
+*.zip
+
+# Rust e ferramentas
+target/
+Cargo.lock.bak
+.local/
+*.log
+.DS_Store
