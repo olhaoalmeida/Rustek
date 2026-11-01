@@ -174,33 +174,35 @@ testar algo (por exemplo, falta de placa de vídeo ou dos dados do Minecraft).
 - **Fatia 3:** módulos, um por vez, do mais simples ao mais complexo.
 - **Fatia 4:** Evolved (níveis extras registrados por módulo).
 
-### 10.4 Divisão de modelos (sugestão, não é prova)
+### 10.4 Quem faz cada parte
 
-A escolha abaixo vem de **descrições públicas dos modelos**, não de um teste neste projeto, e eu sou o
-Claude, então tenho interesse na resposta; trate como ponto de partida.
+Modelos disponíveis ao dono: **Claude Sonnet 5.5**, **GPT-5.6 Terra** e **GPT-6 Luna**. O GPT-6 Sol e o
+GPT-6 Astra não estão disponíveis e não entram no plano.
 
-Descrições encontradas (setembro e outubro de 2026):
-- **GPT-6 Luna:** a opção de menor custo da família GPT-6, para trabalho focado e de alto volume
-  (US$ 0,10 entrada e US$ 0,50 saída por milhão de tokens).
-- **GPT-5.6 Terra:** faixa intermediária, equilibra custo e capacidade (US$ 2 e US$ 12 por milhão).
-- **GPT-6 Sol e GPT-6 Astra:** estão acima das duas; a OpenAI posiciona o Sol para programação complexa
-  e fluxos agênticos. Vale considerá-los, porque o projeto é grande e difícil.
-- **Claude Sonnet 5.5:** modelo "inteligente e eficiente para uso diário" do Claude.
+Aviso: esta divisão vem de **descrições públicas dos modelos**, não de um teste neste projeto. O
+Luna é descrito como o de menor custo, para trabalho focado e de alto volume; o Terra, como faixa
+intermediária que equilibra custo e capacidade; o Sonnet 5.5, como modelo eficiente para uso diário.
+Quem escreveu este plano é o Claude, então o Sonnet 5.5 tem interesse nele. A divisão é provisória
+até a calibração abaixo.
 
-Uso sugerido:
-| Papel | Tipo de tarefa | Modelo a testar primeiro |
-|---|---|---|
-| Arquiteto | Fatia 0, desenho do núcleo, regras de mundo, revisão de pull request | o mais capaz que você tiver acesso |
-| Construtor | Fatias 1 a 4, código das máquinas e telas | um modelo médio (Sonnet 5.5 ou Terra) |
-| Operário | Conversão em massa: receitas, textos, tabelas de valores | o mais barato (Luna) |
+Regras de uso:
+- **Quem escreve uma fatia não a revisa.** O revisor é outro modelo da lista.
+- Dois modelos nunca escrevem na mesma fatia ao mesmo tempo.
+- Todos recebem o mesmo contexto: `DESENHO.md` e `AGENTS.md`.
 
-Por que não usar os três em tudo: cada modelo precisa receber o mesmo contexto (este desenho e
-`AGENTS.md`), e vários modelos mexendo no mesmo código sem regra geram conflitos de estilo e
-decisões contraditórias. Se usar mais de um, **um escreve e outro revisa**, nunca dois escrevendo na
-mesma fatia ao mesmo tempo.
+| Parte | Quem escreve | Quem revisa | Por quê |
+|---|---|---|---|
+| Fatia 0: tabela "existe / falta / como contornar" do Horizon | Sonnet 5.5 | Terra | Exige ler muito código com cuidado e registrar arquivo e linha, sem supor |
+| Fatia 1: estrutura do mod, tela de configurações, config, reinício, primeira máquina | Sonnet 5.5 | Terra | Define a base que as outras partes usam |
+| Fatia 2: lista de módulos no mundo e bloqueio de entrada | Terra | Sonnet 5.5 | Lógica delimitada, com muitos testes |
+| Fatia 3: máquinas e telas de cada módulo | Terra | Sonnet 5.5 | Trabalho repetido em volume médio |
+| Fatia 3: conversão em massa (receitas, textos, tabelas, modelos JSON) | Luna | Terra | Tarefa mecânica; o resultado é conferido por script e por teste |
+| Fatia 4: níveis extras do Evolved | Sonnet 5.5 | Terra | Mexe no desenho do núcleo |
+| Créditos, `NOTICE.md` e licenças | Sonnet 5.5 escreve | o dono confere | Decisão de licença é do dono |
 
-Como decidir de verdade: dar a **mesma tarefa pequena e real** (por exemplo, uma máquina simples com
-receita) a cada modelo, rodar os testes e comparar o resultado e o custo. Só depois fixar os papéis.
+Calibração (antes da Fatia 1): dar a **mesma tarefa pequena e real** aos três (por exemplo, uma máquina
+simples com receita, energia e tela), rodar os testes e comparar resultado e custo. Se a ordem real for
+diferente da tabela, a tabela muda. A tarefa e o resultado ficam registrados em `PROGRESSO.md`.
 
 ### 10.5 O que a IA nunca faz sozinha
 

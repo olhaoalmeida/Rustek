@@ -12,3 +12,4 @@ Projeto: **Mekanism Rust**, um mod para o Horizon (Minecraft 26.3 em Rust). O pl
 7. Pronto = compila, passa formatador e linter, tem teste de comportamento com valor esperado independente do código, e `PROGRESSO.md` atualizado. Diga o que não pôde testar.
 8. Nunca publique, abra PR em repositório alheio, fale com autores nem mexa em dados reais de jogador sem pedido explícito.
 9. Commits terminam com a linha `Co-Authored-By` do modelo usado.
+10. Quem escreve uma fatia não a revisa: o revisor é outro modelo (tabela em `DESENHO.md`, seção 10.4).
