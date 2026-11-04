@@ -13,3 +13,7 @@ Cargo.lock.bak
 .local/
 *.log
 .DS_Store
+
+mod/api/.cargo-check-patch.toml
+mod/api/Cargo.lock
+mod/api/target/

@@ -16,3 +16,7 @@ energia ou comportamento vai aqui, com o motivo.
 ## Entradas
 
 Nenhuma ainda.
+
+## 2026-11-04 (Fatia 1)
+- **Reinício automático**: o Horizon não tem hook para reiniciar o jogo (f40d4df). O mod mostra "Reinicie o jogo" e o jogador reinicia. Muda DESENHO.md seção 3 e 9.
+- **Arquivo de configuração**: um arquivo por chave na pasta de dados do mod (`Host::setting`/`set_setting`), não um `.toml` único.

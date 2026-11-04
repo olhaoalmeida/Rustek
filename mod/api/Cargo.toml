@@ -1,0 +1,8 @@
+[package]
+name = "mod-rustek"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+# O launcher aponta isto para o código do Horizon que ele compila.
+horizon-client = { git = "https://github.com/horizon-rust/horizon", rev = "f40d4df781963ed0a6e1e0fd41bf740f652e2e46", default-features = false }

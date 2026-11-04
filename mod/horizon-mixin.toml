@@ -1,0 +1,11 @@
+# Mekanism Rust (id provisório: "rustek"; ver docs/fatia-1.md, pergunta ao dono).
+# Mod nativo do tipo "trait mod" (docs/native-mods.md do Horizon, seção "Trait mods").
+[mod]
+id = "rustek"
+version = "0.1.0"
+
+[compatibility]
+horizon_revision = "f40d4df781963ed0a6e1e0fd41bf740f652e2e46"
+
+[api]
+path = "api"

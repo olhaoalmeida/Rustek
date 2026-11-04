@@ -27,15 +27,47 @@ Gases/químicos, multiblocos, rede de cabos, veto de entrada em mundo, reinício
 entrega reinício automático**: mostra o aviso "reinicie o jogo". Isso muda o DESENHO.md (seção 9, pergunta 1) e
 deve ir para `DIFERENCAS.md` quando o código existir.
 
-## Como estou validando
-`cargo check -p horizon-client --lib` no pinado `/home/claude/deps/horizon` (sem git; é um checkout fixo),
-com `CARGO_TARGET_DIR` fora dele, para gerar a trait. Depois, compilar o pacote do mod contra esse Horizon.
-Montar o jogo inteiro leva ~16 min (ver o repositório Molt, `tools/horizon.py`).
+## Como validar (comandos exatos, repetíveis)
+Checkout fixo do Horizon: `/home/claude/deps/horizon` em `f40d4df781963ed0a6e1e0fd41bf740f652e2e46`.
+```sh
+# lógica pura dos interruptores (rápido, sem o jogo)
+cd mod/api/src && rustc --edition 2024 --test modules.rs -o /tmp/modules_test && /tmp/modules_test
+# o pacote contra o Horizon de verdade (~2 min na primeira vez; sem áudio: falta libasound2-dev na sessão)
+cd mod/api && CARGO_TARGET_DIR=<fora do repo> cargo check --config .cargo-check-patch.toml
+cargo clippy --config .cargo-check-patch.toml -- -D warnings && cargo fmt --check
+```
+`.cargo-check-patch.toml` é local (ignorado pelo git). Conteúdo: `[patch."https://github.com/horizon-rust/horizon"]`
+`horizon-client = { path = "<checkout>/crates/horizon-client" }`, mais os três `[patch.crates-io]` do `Cargo.toml` raiz do
+Horizon (`wgpu-hal`, `naga`, `libmimalloc-sys`, caminhos em `third_party/`). Sem eles o cargo não resolve `wgpu-hal`.
+A trait `Hooks` gerada fica em `<target>/debug/build/horizon-client-*/out/mod_api_generated.rs` (e `..._host.rs`).
 
-## Pendências
-- [ ] Gerar a trait `Hooks` e anotar aqui os nomes reais dos métodos usados.
-- [ ] Pacote `api/` com módulos: `config` (lê `rustek.toml`), `modules` (lista de módulos e estado), `settings`
-      (botões "Ligado/Desligado"), `machine` (primeira máquina de energia e itens).
-- [ ] Testes de comportamento da config (valores esperados escritos à mão, não derivados do código).
-- [ ] Atualizar `PROGRESSO.md`, `DIFERENCAS.md`, `docs/fatia-0.md` (API 359).
-- [ ] A calibração dos três modelos (DESENHO.md 10.4) **não foi feita**; o dono mandou começar. Registrado.
+## Feito
+- `mod/horizon-mixin.toml`, `mod/api/` (pacote `mod-rustek`). Id provisório `rustek` (pergunta ao dono: o id vira
+  prefixo de blocos e itens e de pastas de dados, então precisa ser confirmado antes da primeira máquina).
+- `mod/api/src/modules.rs`: os 6 módulos, estado "ativo" (retrato da abertura) x "desejado", rótulos dos botões,
+  aviso de reinício. 6 testes, todos com valores escritos à mão. Passam.
+- `mod/api/src/lib.rs`: liga isso a `Hooks::settings` (lista de rótulos) e `Hooks::settings_click` (vira o módulo e
+  grava com `Host::set_setting("rustek", "module.<nome>", "true"|"false")`). O estado inicial vem de `Host::setting`.
+  Compila e passa `clippy -D warnings` e `fmt --check` contra o Horizon `f40d4df`.
+- O "arquivo de configuração" do DESENHO.md é, na prática, um arquivo por chave na pasta de dados do mod
+  (`native_data_dir`, o próprio Horizon grava assim). Vai para `DIFERENCAS.md`.
+
+## O que NÃO foi testado
+- `horizon-launcher native-build` (empacotar e instalar): não rodei. O launcher não está nesta sessão.
+- O jogo com o mod: nunca abriu. Não sei como o Horizon mostra a página de configurações de um mod; só sei que ele
+  chama `settings`/`settings_click` (docs e catálogo). Teste no Windows do dono pendente.
+- `horizon_revision` no `horizon-mixin.toml` e `rev` no `Cargo.toml` apontam para `f40d4df`; o Horizon muda rápido.
+
+## Decisões provisórias (confirmar com o dono)
+1. Valor inicial dos módulos na primeira execução: **todos desligados** (`DEFAULT_ENABLED` em `modules.rs`).
+   O DESENHO.md diz só que o padrão de mundo novo é "o que o usuário decidir".
+2. Rótulos em português escritos direto no código: a API de configurações recebe `String`, não chave de tradução.
+3. Id do mod `rustek` (acima).
+
+## Próximos passos (para a IA que continuar)
+- [ ] Primeira máquina: energia + uma receita + uma tela. Ler antes `native_block_entity*`, `native_screen*`,
+      `native_recipes_of_type` no catálogo (`native-hooks.json`) e `docs/native-mods.md` (blocos declarados por
+      `native_blocks`). Os números de energia do Mekanism original precisam ser lidos em `mekanism/mekanism`
+      (clone raso em `commit 53a328e`) antes de escolher `i32`.
+- [ ] Testar no Windows com `horizon-launcher native-build mod --instance <nome> --trust-native-code`.
+- [ ] Pedir revisão ao GPT-5.6 Terra (regra do projeto: quem escreve não revisa).
