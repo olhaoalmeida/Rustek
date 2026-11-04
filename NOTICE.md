@@ -11,7 +11,7 @@ Estado: nada foi portado ainda.
 
 | Projeto | Autores | Licença indicada na página | Confirmada no repositório? |
 |---|---|---|---|
-| Mekanism | bradyaidanc e equipe | MIT | não |
+| Mekanism | bradyaidanc e equipe | MIT | **sim, só o código**: `LICENSE` e `README.md` do repositório `mekanism/mekanism` (commit `53a328e`, 2026-11-03) dizem MIT, copyright 2017-2025 Aidan C. Brady. O README não separa texturas e sons e não achei atribuição por arquivo, então a licença dos assets (1.395 PNGs, sons) **não está confirmada**. Não copiar assets até o dono decidir |
 | Mekanism Generators | bradyaidanc e equipe | MIT | não |
 | Mekanism Tools | bradyaidanc e equipe | MIT | não |
 | Mekanism Additions | bradyaidanc e equipe | MIT | não |
